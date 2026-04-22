@@ -3,115 +3,145 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DoodleNotes.co - Infographic Study Notes</title>
+    <title>DoodleNotes | Premium Visual Learning</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     
     <style>
-        .font-handwriting { font-family: 'Patrick Hand', cursive; letter-spacing: 0.5px; }
-        .font-sans { font-family: 'Inter', sans-serif; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; scroll-behavior: smooth; }
         
-        .paper-texture {
-            background-color: #fdfdfc;
-            background-image: 
-                linear-gradient(#e5e7eb 1px, transparent 1px),
-                linear-gradient(90deg, #fca5a5 2px, transparent 2px);
-            background-size: 100% 2rem, 100% 100%;
-            background-position: 0 2rem, 2.5rem 0;
-            box-shadow: 2px 4px 15px rgba(0,0,0,0.05);
-            position: relative; overflow: hidden;
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
         }
 
-        .highlight-neon {
-            background: linear-gradient(104deg, transparent 0%, transparent 5%, #ffea0099 6%, #ffea0099 94%, transparent 95%, transparent 100%);
-            padding: 0 4px; border-radius: 3px;
+        .product-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .circle-red { position: relative; display: inline-block; z-index: 1; }
-        .circle-red::before {
-            content: ''; position: absolute; top: -4px; left: -6px; right: -6px; bottom: -4px;
-            border: 2px solid #ef4444; border-radius: 50% 40% 50% 40% / 40% 50% 40% 50%;
-            z-index: -1; transform: rotate(-2deg);
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 60px -12px rgba(0,0,0,0.12);
         }
 
-        .doodle-hover:hover { transform: scale(1.1) rotate(5deg); transition: transform 0.2s ease; }
-        .aspect-a4 { aspect-ratio: 1 / 1.414; }
-        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .premium-gradient {
+            background: linear-gradient(135deg, #fffcf5 0%, #f7f1e3 100%);
+        }
+
+        .cart-badge { animation: pop 0.3s ease-out; }
+        @keyframes pop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.4); }
+            100% { transform: scale(1); }
+        }
+
+        /* Floating WhatsApp Button Animation */
+        .float-btn {
+            animation: bounce 2s infinite;
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-10px);}
+            60% {transform: translateY(-5px);}
+        }
     </style>
 </head>
-<body class="min-h-screen bg-slate-50 font-sans text-slate-900">
+<body class="bg-[#fafafa] text-slate-900">
 
-    <nav class="sticky top-0 z-40 bg-white border-b border-slate-200 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <div class="flex items-center gap-2">
-                    <div class="bg-yellow-300 p-2 rounded-lg transform -rotate-6">
-                        <i data-lucide="book-open" class="text-slate-900 w-6 h-6"></i>
+    <a href="https://wa.me/918158094433?text=Hi, I need help with DoodleNotes." target="_blank" class="fixed bottom-8 right-8 z-[100] bg-[#25D366] text-white p-4 rounded-2xl shadow-2xl flex items-center gap-3 float-btn hover:scale-110 transition-transform">
+        <i data-lucide="message-circle" class="w-6 h-6"></i>
+        <span class="font-bold text-sm">Help?</span>
+    </a>
+
+    <nav class="sticky top-0 z-50 glass-nav border-b border-slate-100">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex items-center gap-3">
+                    <div class="bg-slate-900 p-2.5 rounded-xl shadow-lg">
+                        <i data-lucide="zap" class="text-yellow-400 w-6 h-6 fill-yellow-400"></i>
                     </div>
-                    <span class="font-handwriting text-2xl font-bold tracking-tight mt-1">DoodleNotes.co</span>
+                    <span class="text-2xl font-extrabold tracking-tight text-slate-900">Doodle<span class="text-yellow-500">Notes</span></span>
                 </div>
-                <div class="flex items-center gap-4">
-                    <button class="p-2 text-slate-500 hover:text-slate-900" onclick="alert('Search coming soon!')">
-                        <i data-lucide="search" class="w-5 h-5"></i>
-                    </button>
-                    <button class="p-2 text-slate-500 hover:text-slate-900 relative" onclick="toggleCart()">
-                        <i data-lucide="shopping-cart" class="w-5 h-5"></i>
-                        <span id="cart-count" class="hidden absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/4 -translate-y-1/4 bg-red-500 rounded-full">0</span>
+                
+                <div class="flex items-center gap-6">
+                    <button class="relative p-3 bg-slate-100 rounded-full hover:bg-slate-200 transition-colors" onclick="toggleCart()">
+                        <i data-lucide="shopping-bag" class="w-5 h-5 text-slate-700"></i>
+                        <span id="cart-count" class="hidden absolute -top-1 -right-1 flex items-center justify-center w-5 h-5 text-[10px] font-bold text-white bg-yellow-500 rounded-full border-2 border-white cart-badge">0</span>
                     </button>
                 </div>
             </div>
         </div>
     </nav>
 
-    <div id="cart-drawer" class="hidden fixed inset-0 z-50 overflow-hidden">
-        <div class="absolute inset-0 bg-black bg-opacity-50" onclick="toggleCart()"></div>
-        <div class="absolute inset-y-0 right-0 max-w-md w-full bg-white shadow-xl flex flex-col">
-            <div class="p-6 border-b flex justify-between items-center bg-slate-50">
-                <h2 class="text-xl font-bold flex items-center gap-2">
-                    <i data-lucide="shopping-cart" class="w-5 h-5"></i> Your Backpack
-                </h2>
-                <button onclick="toggleCart()" class="text-slate-400 hover:text-slate-600">
-                    <i data-lucide="x" class="w-6 h-6"></i>
-                </button>
-            </div>
-            <div id="cart-items" class="flex-1 overflow-y-auto p-6 space-y-4">
-                </div>
-            <div id="cart-footer" class="hidden p-6 border-t bg-slate-50">
-                <div class="flex justify-between items-center mb-4">
-                    <span class="font-medium text-slate-600">Total</span>
-                    <span id="cart-total" class="font-bold text-2xl">$0.00</span>
-                </div>
-                <button onclick="alert('Checkout feature coming soon!')" class="w-full bg-slate-900 text-white py-3 rounded-xl font-bold hover:bg-slate-800 transition-colors flex justify-center items-center gap-2">
-                    Checkout securely <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                </button>
+    <section class="py-20 text-center">
+        <div class="max-w-4xl mx-auto px-6">
+            <h1 class="text-5xl md:text-7xl font-[800] text-slate-900 mb-6 leading-tight tracking-tight">
+                Master Science with <br/>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-yellow-500 to-orange-500">Visual Intelligence.</span>
+            </h1>
+            <p class="text-lg text-slate-500 mb-10 max-w-xl mx-auto font-medium">
+                Premium infographics & handwritten study notes for WBHSC Science students.
+            </p>
+            <div class="flex flex-wrap justify-center gap-6 opacity-60 grayscale hover:grayscale-0 transition-all">
+                <div class="flex items-center gap-2 font-bold text-xs"><i data-lucide="shield-check" class="w-4 h-4 text-green-500"></i> UPI SECURE</div>
+                <div class="flex items-center gap-2 font-bold text-xs"><i data-lucide="clock" class="w-4 h-4 text-blue-500"></i> INSTANT ACCESS</div>
+                <div class="flex items-center gap-2 font-bold text-xs"><i data-lucide="phone" class="w-4 h-4 text-green-400"></i> 24/7 WHATSAPP</div>
             </div>
         </div>
-    </div>
+    </section>
 
-    <div class="bg-white border-b border-slate-200 overflow-hidden relative">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 relative z-10">
-            <div class="text-center max-w-3xl mx-auto">
-                <h1 class="text-4xl md:text-5xl font-extrabold text-slate-900 mb-6 tracking-tight">
-                    Study smarter, not harder with <span class="text-transparent bg-clip-text bg-gradient-to-r from-yellow-500 to-red-500">Visual Infographics</span>.
-                </h1>
-                <p class="text-slate-600 mb-8 font-handwriting text-2xl">
-                    Messy but highly legible handwritten notes. Essential concepts highlighted. Ready to print in A4 size. Aced exams guaranteed.*
-                </p>
-            </div>
-        </div>
-    </div>
-
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <main class="max-w-7xl mx-auto px-6 lg:px-8 pb-32">
         <div id="product-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
             </div>
     </main>
 
+    <div id="cart-drawer" class="hidden fixed inset-0 z-[100] overflow-hidden">
+        <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="toggleCart()"></div>
+        <div class="absolute inset-y-0 right-0 max-w-md w-full bg-white shadow-2xl flex flex-col p-8 transform transition-all duration-500">
+            <div class="flex justify-between items-center mb-10">
+                <h2 class="text-2xl font-[800] flex items-center gap-3">
+                    <i data-lucide="shopping-bag" class="w-6 h-6 text-yellow-500"></i> My Cart
+                </h2>
+                <button onclick="toggleCart()" class="p-2 hover:bg-slate-100 rounded-full">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+            
+            <div id="cart-items" class="flex-1 overflow-y-auto space-y-6 scrollbar-hide">
+                </div>
+
+            <div id="cart-footer" class="hidden pt-8 border-t border-slate-100">
+                <div class="mb-6">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-slate-400 font-bold text-xs uppercase tracking-widest">Total Amount</span>
+                        <span id="cart-total" class="text-3xl font-[900] text-slate-900">$0.00</span>
+                    </div>
+                    <p class="text-[10px] text-slate-400 font-medium italic">Instant delivery after payment verification.</p>
+                </div>
+
+                <div class="bg-slate-50 p-4 rounded-2xl mb-6">
+                    <p class="text-[10px] font-extrabold text-slate-400 uppercase mb-3 text-center">Accepted Methods</p>
+                    <div class="flex justify-center gap-4 opacity-70">
+                        <img src="https://img.icons8.com/color/48/000000/google-pay-india.png" class="h-6" alt="GPay"/>
+                        <img src="https://img.icons8.com/color/48/000000/phonepe.png" class="h-6" alt="PhonePe"/>
+                        <img src="https://img.icons8.com/color/48/000000/upi.png" class="h-6" alt="UPI"/>
+                    </div>
+                </div>
+
+                <button onclick="checkoutToWhatsApp()" class="w-full bg-slate-900 text-white py-5 rounded-2xl font-[800] hover:bg-slate-800 transition-all flex justify-center items-center gap-3 shadow-xl shadow-slate-200">
+                    Buy via WhatsApp <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script>
         const products = [
-            { id: 1, title: "World War II Timeline", category: "History", price: 4.99, date: "1939-1945", highlight: "Axis vs Allies", doodle: "✈️💣", desc: "Complete visual timeline of major WWII events." },
-            { id: 2, title: "Electric Charges & Field", category: "Physics", price: 3.99, date: "Coulomb", highlight: "Electric Flux", doodle: "⚡🧲", desc: "Visualizing forces with simple, easy-to-understand diagrams." },
-            { id: 3, title: "Organic Chemistry", category: "Chemistry", price: 5.99, date: "Carbon Bonds", highlight: "Nomenclature", doodle: "⬡⬣", desc: "Stop crying over hexagons. Visual guide to organic compounds." }
+            { id: 1, title: "Electric Charges & Field", category: "Physics", price: 3.99, tag: "Hottest", color: "blue", desc: "Complete visual guide for Semester 3. Detailed field diagrams." },
+            { id: 2, title: "Organic Chemistry", category: "Chemistry", price: 4.99, tag: "Recommended", color: "orange", desc: "Nomenclature & Bonding rules made simple with 3D doodles." },
+            { id: 3, title: "Adarini - Story Map", category: "Bengali", price: 1.99, tag: "Class 12", color: "emerald", desc: "Full chapter visualization and character analysis." }
         ];
 
         let cart = [];
@@ -119,47 +149,48 @@
         function renderProducts() {
             const grid = document.getElementById('product-grid');
             grid.innerHTML = products.map(p => `
-                <div class="group flex flex-col">
-                    <div class="paper-texture aspect-a4 rounded-xl p-8 pt-10 flex flex-col justify-between transition-all duration-300 group-hover:-translate-y-2 group-hover:shadow-2xl border border-slate-200">
-                        <div class="pl-6 font-handwriting text-slate-800 space-y-6 relative z-10">
-                            <div class="flex justify-between items-start">
-                                <h3 class="text-3xl font-bold leading-tight border-b-2 border-slate-300 pb-1">${p.title}</h3>
-                                <div class="text-4xl doodle-hover">${p.doodle}</div>
-                            </div>
-                            <div class="text-2xl mt-4">Key concept: <span class="highlight-neon font-bold">${p.highlight}</span></div>
-                            <div class="text-2xl mt-4">Remember this: <span class="circle-red font-bold text-red-600 px-1">${p.date}</span></div>
-                            <div class="mt-6 space-y-3 opacity-60">
-                                <div class="h-4 bg-slate-300 rounded-full w-full"></div>
-                                <div class="h-4 bg-slate-300 rounded-full w-5/6"></div>
-                            </div>
-                        </div>
-                        <div class="absolute top-4 left-4">
-                            <span class="bg-black text-white text-xs font-sans font-bold px-3 py-1 rounded-full uppercase">${p.category}</span>
-                        </div>
+                <div class="product-card bg-white rounded-[40px] p-8 border border-slate-100 flex flex-col h-full">
+                    <div class="mb-6">
+                        <span class="px-4 py-1.5 bg-yellow-50 text-yellow-600 text-[10px] font-black uppercase tracking-widest rounded-full border border-yellow-100">
+                            ${p.tag}
+                        </span>
                     </div>
-                    <div class="mt-5 px-2 flex flex-col flex-grow">
-                        <div class="flex justify-between items-start mb-2">
-                            <h4 class="font-bold text-lg">${p.title}</h4>
-                            <span class="font-bold text-lg">$${p.price}</span>
+                    <div class="mb-8 p-6 rounded-3xl flex items-center justify-center min-h-[180px] premium-gradient relative group-hover:scale-105 transition-transform">
+                         <i data-lucide="file-text" class="w-12 h-12 text-slate-800/10 absolute top-4 right-4"></i>
+                         <div class="font-black text-slate-800 text-xl text-center px-4 leading-snug uppercase tracking-tight">
+                            ${p.title}
+                         </div>
+                    </div>
+                    <div class="flex-grow">
+                        <p class="text-[10px] font-black text-slate-400 mb-2 uppercase tracking-[0.2em]">${p.category}</p>
+                        <h3 class="text-2xl font-[800] text-slate-900 mb-3">${p.title}</h3>
+                        <p class="text-sm text-slate-500 font-medium leading-relaxed mb-8">${p.desc}</p>
+                    </div>
+                    <div class="flex items-center justify-between pt-8 border-t border-slate-50">
+                        <div class="flex flex-col">
+                            <span class="text-[10px] font-bold text-slate-400 uppercase">Price</span>
+                            <span class="text-3xl font-[900] text-slate-900">$${p.price}</span>
                         </div>
-                        <p class="text-slate-500 text-sm mb-4">${p.desc}</p>
-                        <button onclick="addToCart(${p.id})" class="w-full border-2 border-slate-900 text-slate-900 hover:bg-slate-900 hover:text-white py-2 rounded-xl font-bold transition-colors flex items-center justify-center gap-2">
-                            Add to Cart
+                        <button onclick="addToCart(${p.id})" class="p-5 bg-slate-900 text-white rounded-2xl hover:bg-yellow-500 hover:text-white transition-all shadow-lg">
+                            <i data-lucide="plus" class="w-6 h-6"></i>
                         </button>
                     </div>
                 </div>
             `).join('');
+            lucide.createIcons();
         }
 
         function addToCart(id) {
             const product = products.find(p => p.id === id);
             cart.push(product);
             updateCart();
-            alert(product.title + " added to your backpack!");
+            document.getElementById('cart-count').classList.add('animate-pop');
+            setTimeout(() => document.getElementById('cart-count').classList.remove('animate-pop'), 300);
         }
 
         function toggleCart() {
-            document.getElementById('cart-drawer').classList.toggle('hidden');
+            const drawer = document.getElementById('cart-drawer');
+            drawer.classList.toggle('hidden');
         }
 
         function updateCart() {
@@ -173,215 +204,17 @@
                 count.innerText = cart.length;
                 footer.classList.remove('hidden');
                 
-                items.innerHTML = cart.map(item => `
-                    <div class="flex justify-between items-center bg-white border border-slate-100 p-4 rounded-xl shadow-sm">
-                        <div>
-                            <h3 class="font-bold text-slate-800">${item.title}</h3>
-                            <p class="text-sm text-slate-500">PDF Download</p>
+                items.innerHTML = cart.map((item, index) => `
+                    <div class="flex items-center gap-5 bg-slate-50 p-5 rounded-3xl border border-white">
+                        <div class="w-14 h-14 bg-white rounded-2xl flex items-center justify-center shadow-sm font-bold text-slate-400">PDF</div>
+                        <div class="flex-1">
+                            <h4 class="font-extrabold text-slate-900 text-sm leading-tight">${item.title}</h4>
+                            <p class="text-[10px] font-bold text-slate-400 mt-1 uppercase">$${item.price}</p>
                         </div>
-                        <span class="font-bold">$${item.price}</span>
-                    </div>
-                `).join('');
-                
-                const sum = cart.reduce((acc, curr) => acc + curr.price, 0);
-                total.innerText = '$' + sum.toFixed(2);
-            } else {
-                count.classList.add('hidden');
-                footer.classList.add('hidden');
-                items.innerHTML = `<div class="text-center py-12 text-slate-500"><div class="font-handwriting text-4xl mb-4 text-slate-300">¯\\_(ツ)_/¯</div><p>Your cart is empty.</p></div>`;
-            }
-        }
-
-        // Initialize icons and render
-        lucide.createIcons();
-        renderProducts();
-        updateCart();
-    </script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DoodleNotes.co - Infographic Study Notes</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-    
-    <style>
-        .font-handwriting { font-family: 'Patrick Hand', cursive; letter-spacing: 0.5px; }
-        .font-sans { font-family: 'Inter', sans-serif; }
-        
-        .paper-texture {
-            background-color: #fdfdfc;
-            background-image: 
-                linear-gradient(#e5e7eb 1px, transparent 1px),
-                linear-gradient(90deg, #fca5a5 2px, transparent 2px);
-            background-size: 100% 2rem, 100% 100%;
-            background-position: 0 2rem, 2.5rem 0;
-            box-shadow: 2px 4px 15px rgba(0,0,0,0.05);
-            position: relative; overflow: hidden;
-        }
-
-        .highlight-neon {
-            background: linear-gradient(104deg, transparent 0%, transparent 5%, #ffea0099 6%, #ffea0099 94%, transparent 95%, transparent 100%);
-            padding: 0 4px; border-radius: 3px;
-        }
-
-        .circle-red { position: relative; display: inline-block; z-index: 1; }
-        .circle-red::before {
-            content: ''; position: absolute; top: -4px; left: -6px; right: -6px; bottom: -4px;
-            border: 2px solid #ef4444; border-radius: 50% 40% 50% 40% / 40% 50% 40% 50%;
-            z-index: -1; transform: rotate(-2deg);
-        }
-
-        .doodle-hover:hover { transform: scale(1.1) rotate(5deg); transition: transform 0.2s ease; }
-        .aspect-a4 { aspect-ratio: 1 / 1.414; }
-        .hide-scrollbar::-webkit-scrollbar { display: none; }
-    </style>
-</head>
-<body class="min-h-screen bg-slate-50 font-sans text-slate-900">
-
-    <nav class="sticky top-0 z-40 bg-white border-b border-slate-200 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <div class="flex items-center gap-2">
-                    <div class="bg-yellow-300 p-2 rounded-lg transform -rotate-6">
-                        <i data-lucide="book-open" class="text-slate-900 w-6 h-6"></i>
-                    </div>
-                    <span class="font-handwriting text-2xl font-bold tracking-tight mt-1">DoodleNotes.co</span>
-                </div>
-                <div class="flex items-center gap-4">
-                    <button class="p-2 text-slate-500 hover:text-slate-900" onclick="alert('Search coming soon!')">
-                        <i data-lucide="search" class="w-5 h-5"></i>
-                    </button>
-                    <button class="p-2 text-slate-500 hover:text-slate-900 relative" onclick="toggleCart()">
-                        <i data-lucide="shopping-cart" class="w-5 h-5"></i>
-                        <span id="cart-count" class="hidden absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/4 -translate-y-1/4 bg-red-500 rounded-full">0</span>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </nav>
-
-    <div id="cart-drawer" class="hidden fixed inset-0 z-50 overflow-hidden">
-        <div class="absolute inset-0 bg-black bg-opacity-50" onclick="toggleCart()"></div>
-        <div class="absolute inset-y-0 right-0 max-w-md w-full bg-white shadow-xl flex flex-col">
-            <div class="p-6 border-b flex justify-between items-center bg-slate-50">
-                <h2 class="text-xl font-bold flex items-center gap-2">
-                    <i data-lucide="shopping-cart" class="w-5 h-5"></i> Your Backpack
-                </h2>
-                <button onclick="toggleCart()" class="text-slate-400 hover:text-slate-600">
-                    <i data-lucide="x" class="w-6 h-6"></i>
-                </button>
-            </div>
-            <div id="cart-items" class="flex-1 overflow-y-auto p-6 space-y-4">
-                </div>
-            <div id="cart-footer" class="hidden p-6 border-t bg-slate-50">
-                <div class="flex justify-between items-center mb-4">
-                    <span class="font-medium text-slate-600">Total</span>
-                    <span id="cart-total" class="font-bold text-2xl">$0.00</span>
-                </div>
-                <button onclick="alert('Checkout feature coming soon!')" class="w-full bg-slate-900 text-white py-3 rounded-xl font-bold hover:bg-slate-800 transition-colors flex justify-center items-center gap-2">
-                    Checkout securely <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <div class="bg-white border-b border-slate-200 overflow-hidden relative">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 relative z-10">
-            <div class="text-center max-w-3xl mx-auto">
-                <h1 class="text-4xl md:text-5xl font-extrabold text-slate-900 mb-6 tracking-tight">
-                    Study smarter, not harder with <span class="text-transparent bg-clip-text bg-gradient-to-r from-yellow-500 to-red-500">Visual Infographics</span>.
-                </h1>
-                <p class="text-slate-600 mb-8 font-handwriting text-2xl">
-                    Messy but highly legible handwritten notes. Essential concepts highlighted. Ready to print in A4 size. Aced exams guaranteed.*
-                </p>
-            </div>
-        </div>
-    </div>
-
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div id="product-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-            </div>
-    </main>
-
-    <script>
-        const products = [
-            { id: 1, title: "World War II Timeline", category: "History", price: 4.99, date: "1939-1945", highlight: "Axis vs Allies", doodle: "✈️💣", desc: "Complete visual timeline of major WWII events." },
-            { id: 2, title: "Electric Charges & Field", category: "Physics", price: 3.99, date: "Coulomb", highlight: "Electric Flux", doodle: "⚡🧲", desc: "Visualizing forces with simple, easy-to-understand diagrams." },
-            { id: 3, title: "Organic Chemistry", category: "Chemistry", price: 5.99, date: "Carbon Bonds", highlight: "Nomenclature", doodle: "⬡⬣", desc: "Stop crying over hexagons. Visual guide to organic compounds." }
-        ];
-
-        let cart = [];
-
-        function renderProducts() {
-            const grid = document.getElementById('product-grid');
-            grid.innerHTML = products.map(p => `
-                <div class="group flex flex-col">
-                    <div class="paper-texture aspect-a4 rounded-xl p-8 pt-10 flex flex-col justify-between transition-all duration-300 group-hover:-translate-y-2 group-hover:shadow-2xl border border-slate-200">
-                        <div class="pl-6 font-handwriting text-slate-800 space-y-6 relative z-10">
-                            <div class="flex justify-between items-start">
-                                <h3 class="text-3xl font-bold leading-tight border-b-2 border-slate-300 pb-1">${p.title}</h3>
-                                <div class="text-4xl doodle-hover">${p.doodle}</div>
-                            </div>
-                            <div class="text-2xl mt-4">Key concept: <span class="highlight-neon font-bold">${p.highlight}</span></div>
-                            <div class="text-2xl mt-4">Remember this: <span class="circle-red font-bold text-red-600 px-1">${p.date}</span></div>
-                            <div class="mt-6 space-y-3 opacity-60">
-                                <div class="h-4 bg-slate-300 rounded-full w-full"></div>
-                                <div class="h-4 bg-slate-300 rounded-full w-5/6"></div>
-                            </div>
-                        </div>
-                        <div class="absolute top-4 left-4">
-                            <span class="bg-black text-white text-xs font-sans font-bold px-3 py-1 rounded-full uppercase">${p.category}</span>
-                        </div>
-                    </div>
-                    <div class="mt-5 px-2 flex flex-col flex-grow">
-                        <div class="flex justify-between items-start mb-2">
-                            <h4 class="font-bold text-lg">${p.title}</h4>
-                            <span class="font-bold text-lg">$${p.price}</span>
-                        </div>
-                        <p class="text-slate-500 text-sm mb-4">${p.desc}</p>
-                        <button onclick="addToCart(${p.id})" class="w-full border-2 border-slate-900 text-slate-900 hover:bg-slate-900 hover:text-white py-2 rounded-xl font-bold transition-colors flex items-center justify-center gap-2">
-                            Add to Cart
+                        <button onclick="removeFromCart(${index})" class="p-2 text-slate-300 hover:text-red-500 transition-colors">
+                            <i data-lucide="trash-2" class="w-5 h-5"></i>
                         </button>
                     </div>
-                </div>
-            `).join('');
-        }
-
-        function addToCart(id) {
-            const product = products.find(p => p.id === id);
-            cart.push(product);
-            updateCart();
-            alert(product.title + " added to your backpack!");
-        }
-
-        function toggleCart() {
-            document.getElementById('cart-drawer').classList.toggle('hidden');
-        }
-
-        function updateCart() {
-            const count = document.getElementById('cart-count');
-            const items = document.getElementById('cart-items');
-            const footer = document.getElementById('cart-footer');
-            const total = document.getElementById('cart-total');
-
-            if (cart.length > 0) {
-                count.classList.remove('hidden');
-                count.innerText = cart.length;
-                footer.classList.remove('hidden');
-                
-                items.innerHTML = cart.map(item => `
-                    <div class="flex justify-between items-center bg-white border border-slate-100 p-4 rounded-xl shadow-sm">
-                        <div>
-                            <h3 class="font-bold text-slate-800">${item.title}</h3>
-                            <p class="text-sm text-slate-500">PDF Download</p>
-                        </div>
-                        <span class="font-bold">$${item.price}</span>
-                    </div>
                 `).join('');
                 
                 const sum = cart.reduce((acc, curr) => acc + curr.price, 0);
@@ -389,15 +222,31 @@
             } else {
                 count.classList.add('hidden');
                 footer.classList.add('hidden');
-                items.innerHTML = `<div class="text-center py-12 text-slate-500"><div class="font-handwriting text-4xl mb-4 text-slate-300">¯\\_(ツ)_/¯</div><p>Your cart is empty.</p></div>`;
+                items.innerHTML = `
+                    <div class="text-center py-20 flex flex-col items-center">
+                        <div class="w-24 h-24 bg-slate-50 rounded-[40px] flex items-center justify-center mb-6">
+                            <i data-lucide="shopping-bag" class="w-10 h-10 text-slate-200"></i>
+                        </div>
+                        <p class="text-slate-400 font-bold uppercase tracking-widest text-xs">Bag is Empty</p>
+                    </div>`;
             }
+            lucide.createIcons();
         }
 
-        // Initialize icons and render
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCart();
+        }
+
+        function checkoutToWhatsApp() {
+            const total = cart.reduce((acc, curr) => acc + curr.price, 0).toFixed(2);
+            const itemsNames = cart.map(item => `- ${item.title}`).join('%0A');
+            const message = `Hello Rahat! I want to buy these notes:%0A${itemsNames}%0A%0A*Total: $${total}*%0A%0APlease share the payment link/UPI.`;
+            window.open(`https://wa.me/918158094433?text=${message}`, '_blank');
+        }
+
         lucide.createIcons();
         renderProducts();
-        updateCart();
     </script>
 </body>
 </html>
-
