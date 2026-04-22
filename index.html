@@ -1,3 +1,6 @@
+Here is your updated code. I have integrated the **Preview Modal**, the **"Look Inside"** button within the renderProducts function, and the **Slider Logic**.
+I have also pre-filled the previewImages array with placeholders based on your uploaded Physics notes (Electrostatics, Current Electricity, and Magnetism).
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,30 +13,180 @@
     
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; scroll-behavior: smooth; }
-        
-        .glass-nav {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-        }
-
-        .product-card {
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .product-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 30px 60px -12px rgba(0,0,0,0.12);
-        }
-
-        .premium-gradient {
-            background: linear-gradient(135deg, #fffcf5 0%, #f7f1e3 100%);
-        }
-
+        .glass-nav { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+        .product-card { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .product-card:hover { transform: translateY(-10px); box-shadow: 0 30px 60px -12px rgba(0,0,0,0.12); }
+        .premium-gradient { background: linear-gradient(135deg, #fffcf5 0%, #f7f1e3 100%); }
         .cart-badge { animation: pop 0.3s ease-out; }
-        @keyframes pop {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.4); }
+        @keyframes pop { 0% { transform: scale(1); } 50% { transform: scale(1.4); } 100% { transform: scale(1); } }
+        .float-btn { animation: bounce 2s infinite; }
+        @keyframes bounce { 0%, 20%, 50%, 80%, 100% {transform: translateY(0);} 40% {transform: translateY(-10px);} 60% {transform: translateY(-5px);} }
+    </style>
+</head>
+<body class="bg-[#fafafa] text-slate-900">
+
+    <a href="https://wa.me/918158094433?text=Hi, I need help with DoodleNotes." target="_blank" class="fixed bottom-8 right-8 z-[100] bg-[#25D366] text-white p-4 rounded-2xl shadow-2xl flex items-center gap-3 float-btn hover:scale-110 transition-transform">
+        <i data-lucide="message-circle" class="w-6 h-6"></i>
+        <span class="font-bold text-sm">Help?</span>
+    </a>
+
+    <div id="preview-modal" class="hidden fixed inset-0 z-[110] flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-slate-900/80 backdrop-blur-md" onclick="closePreview()"></div>
+        <div class="relative bg-white w-full max-w-2xl rounded-[32px] overflow-hidden shadow-2xl transform transition-all">
+            <button onclick="closePreview()" class="absolute top-4 right-4 z-10 bg-white/80 p-2 rounded-full hover:bg-white">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+            <div class="relative h-[450px] bg-slate-100 flex items-center justify-center">
+                <img id="slider-img" src="" class="h-full w-full object-contain p-4" alt="Note Preview">
+                <button onclick="changeSlide(-1)" class="absolute left-4 p-3 bg-white/90 rounded-full shadow-lg hover:bg-white">
+                    <i data-lucide="chevron-left" class="w-6 h-6"></i>
+                </button>
+                <button onclick="changeSlide(1)" class="absolute right-4 p-3 bg-white/90 rounded-full shadow-lg hover:bg-white">
+                    <i data-lucide="chevron-right" class="w-6 h-6"></i>
+                </button>
+            </div>
+            <div class="p-6 text-center">
+                <h3 class="text-xl font-bold text-slate-900">নোটের প্রিভিউ দেখুন</h3>
+                <p class="text-sm text-slate-500 mt-1">সম্পূর্ণ নোট পেতে ₹১০ দিয়ে এখনই কিনুন</p>
+            </div>
+        </div>
+    </div>
+
+    <nav class="sticky top-0 z-50 glass-nav border-b border-slate-100">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex items-center gap-3">
+                    <div class="bg-slate-900 p-2.5 rounded-xl shadow-lg">
+                        <i data-lucide="zap" class="text-yellow-400 w-6 h-6 fill-yellow-400"></i>
+                    </div>
+                    <span class="text-2xl font-extrabold tracking-tight text-slate-900">Doodle<span class="text-yellow-500">Notes</span></span>
+                </div>
+                <div class="flex items-center gap-6">
+                    <button class="relative p-3 bg-slate-100 rounded-full hover:bg-slate-200 transition-colors" onclick="toggleCart()">
+                        <i data-lucide="shopping-bag" class="w-5 h-5 text-slate-700"></i>
+                        <span id="cart-count" class="hidden absolute -top-1 -right-1 flex items-center justify-center w-5 h-5 text-[10px] font-bold text-white bg-yellow-500 rounded-full border-2 border-white cart-badge">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <section class="py-20 text-center">
+        <div class="max-w-4xl mx-auto px-6">
+            <h1 class="text-5xl md:text-7xl font-[800] text-slate-900 mb-6 leading-tight tracking-tight">
+                Master Science with <br/>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-yellow-500 to-orange-500">Visual Intelligence.</span>
+            </h1>
+            <p class="text-lg text-slate-500 mb-10 max-w-xl mx-auto font-medium">Premium infographics & handwritten study notes for WBHSC Science students.</p>
+        </div>
+    </section>
+
+    <main class="max-w-7xl mx-auto px-6 lg:px-8 pb-32">
+        <div id="product-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10"></div>
+    </main>
+
+    <script>
+        const products = [
+            { 
+                id: 1, 
+                title: "Physics Visual Infographic", 
+                category: "Class 12 • Sem 3", 
+                price: 10, 
+                tag: "Top Revision Pick", 
+                desc: "ইলেক্ট্রোস্ট্যাটিক্স থেকে শুরু করে তড়িৎ চুম্বকীয় তরঙ্গ—সব গুরুত্বপূর্ণ সূত্র ও ডায়াগ্রাম এখন এক জায়গায়।" 
+            }
+        ];
+
+        const previewImages = [
+            'https://via.placeholder.com/600x800?text=Electrostatics+Preview', // Replace with your actual Page 1
+            'https://via.placeholder.com/600x800?text=Current+Electricity+Preview', // Replace with your actual Page 2
+            'https://via.placeholder.com/600x800?text=Magnetism+Preview' // Replace with your actual Page 3
+        ];
+
+        let currentSlide = 0;
+        let cart = [];
+
+        function renderProducts() {
+            const grid = document.getElementById('product-grid');
+            grid.innerHTML = products.map(p => `
+                <div class="product-card bg-white rounded-[32px] p-8 flex flex-col h-full border-2 border-transparent hover:border-yellow-400 shadow-sm transition-all">
+                    <div class="mb-6 flex justify-between items-start">
+                        <span class="px-3 py-1 bg-red-100 text-red-600 text-[10px] font-extrabold uppercase tracking-widest rounded-full">${p.tag}</span>
+                        <div class="text-slate-300"><i data-lucide="star" class="w-5 h-5 fill-yellow-400 text-yellow-400"></i></div>
+                    </div>
+                    
+                    <div class="mb-8 p-6 bg-slate-50 rounded-2xl flex flex-col items-center justify-center min-h-[180px] premium-gradient relative overflow-hidden border border-slate-100">
+                         <div class="text-center">
+                            <h4 class="font-extrabold text-slate-800 text-lg mb-1">PHYSICS SEM-3</h4>
+                            <p class="text-[10px] text-slate-500 uppercase font-bold tracking-tighter">WBHSC Full Syllabus Covered</p>
+                         </div>
+                    </div>
+
+                    <div class="flex-grow">
+                        <p class="text-xs font-bold text-yellow-600 mb-2 uppercase tracking-wide">${p.category}</p>
+                        <h3 class="text-2xl font-extrabold text-slate-900 mb-3">${p.title}</h3>
+                        <p class="text-sm text-slate-500 leading-relaxed mb-6">${p.desc}</p>
+                        <ul class="text-[11px] space-y-2 text-slate-600 mb-6">
+                            <li class="flex items-center gap-2"><i data-lucide="check-circle" class="w-3 h-3 text-green-500"></i> Coulomb's & Gauss's Law</li>
+                            <li class="flex items-center gap-2"><i data-lucide="check-circle" class="w-3 h-3 text-green-500"></i> Magnetic Effect & EMI</li>
+                        </ul>
+                    </div>
+
+                    <div class="flex flex-col gap-3 pt-6 border-t border-slate-50">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="text-3xl font-[900] text-slate-900">₹${p.price}</span>
+                            <span class="text-sm text-slate-400 line-through">₹${p.price * 10}</span>
+                        </div>
+                        
+                        <button onclick="openPreview()" class="w-full mb-3 py-3 border-2 border-slate-100 text-slate-600 rounded-2xl font-bold hover:bg-slate-50 transition-all flex justify-center items-center gap-2">
+                            <i data-lucide="eye" class="w-4 h-4"></i> Look Inside
+                        </button>
+
+                        <button onclick="buyNow('${p.title}', ${p.price})" class="w-full py-4 bg-slate-900 text-white rounded-2xl font-bold hover:bg-yellow-500 hover:text-slate-900 transition-all flex justify-center items-center gap-2 shadow-lg">
+                            Buy Now & Download <i data-lucide="arrow-down-to-line" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        // Slider Functions
+        function openPreview() {
+            document.getElementById('preview-modal').classList.remove('hidden');
+            currentSlide = 0;
+            updateSliderImage();
+        }
+
+        function closePreview() { document.getElementById('preview-modal').classList.add('hidden'); }
+
+        function updateSliderImage() {
+            const img = document.getElementById('slider-img');
+            img.src = previewImages[currentSlide];
+            lucide.createIcons();
+        }
+
+        function changeSlide(direction) {
+            currentSlide += direction;
+            if (currentSlide >= previewImages.length) currentSlide = 0;
+            if (currentSlide < 0) currentSlide = previewImages.length - 1;
+            updateSliderImage();
+        }
+
+        function buyNow(title, price) {
+            const message = `Hello Rahat! I want to buy "${title}" for ₹${price}. Please share payment details.`;
+            window.open(`https://wa.me/918158094433?text=${encodeURIComponent(message)}`, '_blank');
+        }
+
+        function toggleCart() { /* Logic for cart toggle */ }
+
+        lucide.createIcons();
+        renderProducts();
+    </script>
+</body>
+</html>
+
+```
             100% { transform: scale(1); }
         }
 
